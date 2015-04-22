@@ -39,5 +39,5 @@ for n=1:block.ndims
             {typestring npts' tagname}, 'Offset', offset, ...
             'Repeat', 1, 'Writable', false);
     q.(tagname) = block.map.data.(tagname);
-    offset = offset + typesize * nelements
+    offset = offset + typesize * nelements;
 end
