@@ -24,7 +24,23 @@ h.BLOCKTYPE.STITCHED_TENSOR = 9;
 h.BLOCKTYPE.STITCHED_MATERIAL = 10;
 h.BLOCKTYPE.STITCHED_MATVAR = 11;
 h.BLOCKTYPE.STITCHED_SPECIES = 12;
-h.BLOCKTYPE.FAMILY = 13;
+h.BLOCKTYPE.SPECIES = 13;
+h.BLOCKTYPE.PLAIN_DERIVED = 14;
+h.BLOCKTYPE.POINT_DERIVED = 15;
+h.BLOCKTYPE.CONTIGUOUS_TENSOR = 16;
+h.BLOCKTYPE.CONTIGUOUS_MATERIAL = 17;
+h.BLOCKTYPE.CONTIGUOUS_MATVAR = 18;
+h.BLOCKTYPE.CONTIGUOUS_SPECIES = 19;
+h.BLOCKTYPE.CPU_SPLIT = 20;
+h.BLOCKTYPE.STITCHED_OBSTACLE_GROUP = 21;
+h.BLOCKTYPE.UNSTRUCTURED_MESH = 22;
+h.BLOCKTYPE.STITCHED = 23;
+h.BLOCKTYPE.CONTIGUOUS = 24;
+h.BLOCKTYPE.LAGRANGIAN_MESH = 25;
+h.BLOCKTYPE.STATION = 26;
+h.BLOCKTYPE.STATION_DERIVED = 27;
+h.BLOCKTYPE.DATABLOCK = 28;
+h.BLOCKTYPE.NAMEVALUE = 29;
 
 h.BLOCKTYPE_NAME = { 'Invalid block'; 'Plain mesh'; 'Point mesh'; ...
     'Plain variable'; 'Point variable'; 'Constant'; 'Simple array'; ...
@@ -70,6 +86,8 @@ code_io_version = fread(h.fid, 1, 'int32');
 % Now seek to first block
 b.block_start = first_block_location;
 
+gridtype = 0;
+
 for n = 1:nblocks
     fseek(h.fid, b.block_start, 'bof');
     b.next_block_location = fread(h.fid, 1, 'uint64');
@@ -89,6 +107,10 @@ for n = 1:nblocks
     switch b.blocktype
       case h.BLOCKTYPE.PLAIN_MESH
         block.var = GetPlainMeshSDF(h);
+        gridtype = h.BLOCKTYPE.PLAIN_MESH;
+      case h.BLOCKTYPE.LAGRANGIAN_MESH
+        block.var = GetLagrangianMeshSDF(h);
+        gridtype = h.BLOCKTYPE.LAGRANGIAN_MESH;
       case h.BLOCKTYPE.POINT_MESH
         block.var = GetPointMeshSDF(h);
       case h.BLOCKTYPE.PLAIN_VARIABLE
@@ -119,11 +141,13 @@ for n = 1:nblocks
     switch b.blocktype
       case h.BLOCKTYPE.PLAIN_MESH
           add = 1;
+      case h.BLOCKTYPE.LAGRANGIAN_MESH
+          add = 1;
       case h.BLOCKTYPE.POINT_MESH
           add = 1;
       case h.BLOCKTYPE.PLAIN_VARIABLE
           add = 1;
-          hasgrid = h.BLOCKTYPE.PLAIN_MESH;
+          hasgrid = gridtype;
       case h.BLOCKTYPE.POINT_VARIABLE
           add = 1;
           hasgrid = h.BLOCKTYPE.POINT_MESH;
