@@ -21,6 +21,10 @@ if block.datatype == h.DATATYPE.REAL4
     typestring = 'single';
 elseif block.datatype == h.DATATYPE.REAL8
     typestring = 'double';
+elseif block.datatype == h.DATATYPE.INTEGER4
+    typestring = 'int32';
+elseif block.datatype == h.DATATYPE.INTEGER8
+    typestring = 'int64';
 end
 
 nelements = 1;
