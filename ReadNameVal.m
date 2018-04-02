@@ -7,33 +7,36 @@
 %
 
 %% Reading functions
-function constants = ReadNameVal(dir, file)
 
-  if( nargin < 2)
+function constants = ReadNameVal(dir, file)
+  if (nargin < 2)
     file = 'const.status'
   end
-  if(nargin < 1)
-      dir = './Data'
+  if (nargin < 1)
+    dir = './Data'
   end
-  name = strcat(dir, '/',  file);
+
+  name = strcat(dir, '/', file);
   constants.file = name;
   fid = fopen(name);
   if fid ~= -1
-      tline = fgetl(fid);
-      while ischar(tline)
-          content = parse_name_val(tline);
-        if isfield(content, 'n') && isfield(content, 'v')
-          constants.(content.n) = content.v;
-        end
-        tline = fgetl(fid);
+    tline = fgetl(fid);
+    while ischar(tline)
+      content = parse_name_val(tline);
+      if isfield(content, 'n') && isfield(content, 'v')
+        constants.(content.n) = content.v;
       end
+      tline = fgetl(fid);
+    end
   end
 end
-function nv = parse_name_val(str,delim)
 
+
+function nv = parse_name_val(str, delim)
   if nargin < 2
     delim = '=';
   end
+
   parts = strsplit(str, delim);
   if size(parts, 2) == 2
     nv.n = char(strtrim(parts(1)));
@@ -46,5 +49,3 @@ function nv = parse_name_val(str,delim)
     nv = 0;
   end
 end
-
-
