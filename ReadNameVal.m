@@ -1,3 +1,10 @@
+%
+% SDF (Self-Describing Format) MatLab reader
+% Copyright (c) 2013-2016, SDF Development Team
+%
+% Distributed under the terms of the BSD 3-clause License.
+% See the LICENSE file for details.
+%
 
 %% Reading functions
 function constants = ReadNameVal(dir, file)
